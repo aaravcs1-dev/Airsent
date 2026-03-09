@@ -1,153 +1,1253 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airsent | Camera-Free Precision Drone Landing</title>
+  <meta
+    name="description"
+    content="Airsent is building a camera-free precision autonomous drone landing platform centered around a smart landing pad and non-visual sensing."
+  />
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
 
-<title>Airsent</title>
+  <style>
+    :root{
+      --bg:#030914;
+      --bg2:#071325;
+      --panel:rgba(10,22,42,0.72);
+      --panel2:rgba(9,18,36,0.92);
+      --line:rgba(105,170,255,0.18);
+      --text:#eef5ff;
+      --muted:#9fb4d4;
+      --blue:#61b7ff;
+      --cyan:#6ef2ff;
+      --violet:#8a7dff;
+      --teal:#34d9c3;
+      --glow-blue:rgba(97,183,255,0.34);
+      --glow-cyan:rgba(110,242,255,0.24);
+      --glow-violet:rgba(138,125,255,0.22);
+      --shadow:0 20px 60px rgba(0,0,0,0.34);
+      --radius:24px;
+      --max:1200px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    *{
+      box-sizing:border-box;
+    }
 
-<style>
+    html{
+      scroll-behavior:smooth;
+    }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 50% 12%, rgba(58,110,255,0.22), transparent 26%),
+        radial-gradient(circle at 70% 30%, rgba(66,231,255,0.10), transparent 22%),
+        radial-gradient(circle at 30% 65%, rgba(138,125,255,0.10), transparent 22%),
+        linear-gradient(180deg,#04101d 0%, #030a14 55%, #02060c 100%);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px);
+      background-size:60px 60px;
+      opacity:0.16;
+      z-index:0;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg, transparent 0%, rgba(86,175,255,0.08) 50%, transparent 100%);
+      width:35%;
+      transform:translateX(-140%);
+      filter:blur(22px);
+      animation:sweep 11s linear infinite;
+      z-index:0;
+    }
+
+    @keyframes sweep{
+      to{transform:translateX(340%);}
+    }
+
+    .page{
+      position:relative;
+      z-index:1;
+    }
+
+    .container{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:30;
+      backdrop-filter:blur(16px);
+      background:rgba(2,10,20,0.58);
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+
+ .nav-inner{
+  width:min(var(--max), calc(100% - 32px));
+  margin:0 auto;
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
 }
 
-body{
-
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-family:'Inter', sans-serif;
-color:white;
-text-align:center;
-
-/* DARK AEROSPACE BACKGROUND */
-
-background:
-radial-gradient(circle at center,
-#0a2742 0%,
-#061a2d 40%,
-#04111f 100%);
-
-overflow:hidden;
-
+   .brand{
+  display:flex;
+  align-items:center;
+  text-decoration:none;
 }
 
-/* PARTICLES */
-
-body::before{
-content:"";
-position:absolute;
-width:200%;
-height:200%;
-
-background-image:
-radial-gradient(white 1px, transparent 1px);
-
-background-size:60px 60px;
-
-opacity:0.05;
-
-animation:moveStars 60s linear infinite;
-
+.brand-logo{
+  height:220px;
+  width:auto;
+  display:block;
+  object-fit:contain;
+  filter:
+    brightness(1.18)
+    contrast(1.08)
+    drop-shadow(0 0 14px rgba(104,183,255,0.18));
 }
 
-@keyframes moveStars{
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:22px;
+      flex-wrap:wrap;
+    }
 
-from{transform:translateY(0);}
-to{transform:translateY(-500px);}
+    .nav-links a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:0.94rem;
+      transition:0.2s ease;
+    }
 
-}
+    .nav-links a:hover{
+      color:var(--text);
+    }
 
-.container{
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:13px 18px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:600;
+      border:1px solid rgba(120,180,255,0.16);
+      color:white;
+      transition:0.22s ease;
+      cursor:pointer;
+    }
 
-max-width:900px;
-padding:40px;
-position:relative;
-z-index:2;
+    .btn.primary{
+      background:
+        linear-gradient(135deg, rgba(42,117,255,0.95), rgba(84,223,255,0.82));
+      box-shadow:
+        0 12px 30px rgba(52,127,255,0.28),
+        0 0 24px rgba(94,214,255,0.12);
+    }
 
-}
+    .btn.primary:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.05);
+    }
 
-/* BIGGER LOGO */
+    .btn.secondary{
+      background:rgba(255,255,255,0.03);
+    }
 
-.logo{
+    .btn.secondary:hover{
+      background:rgba(255,255,255,0.07);
+      transform:translateY(-2px);
+    }
 
-width:420px;
-margin-bottom:60px;
+    section{
+      padding:92px 0;
+    }
 
-filter:drop-shadow(0 0 20px rgba(0,140,255,0.4));
+    .hero{
+      min-height:calc(100vh - 76px);
+      display:grid;
+      grid-template-columns:1.08fr 0.92fr;
+      gap:38px;
+      align-items:center;
+    }
 
-animation:logoGlow 4s ease-in-out infinite;
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(115,191,255,0.16);
+      background:rgba(255,255,255,0.03);
+      color:var(--cyan);
+      font-size:0.84rem;
+      letter-spacing:0.14em;
+      text-transform:uppercase;
+      margin-bottom:22px;
+    }
 
-}
+    .eyebrow::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--cyan);
+      box-shadow:0 0 18px var(--cyan);
+    }
 
-@keyframes logoGlow{
+    h1{
+      margin:0 0 18px;
+      font-size:clamp(2.8rem, 6.3vw, 5.8rem);
+      line-height:0.96;
+      letter-spacing:-0.05em;
+      text-shadow:
+        0 0 24px rgba(98,183,255,0.18),
+        0 0 48px rgba(98,183,255,0.10);
+    }
 
-0%{filter:drop-shadow(0 0 15px rgba(0,140,255,0.3));}
-50%{filter:drop-shadow(0 0 35px rgba(0,140,255,0.6));}
-100%{filter:drop-shadow(0 0 15px rgba(0,140,255,0.3));}
+    .hero p{
+      margin:0 0 30px;
+      color:var(--muted);
+      font-size:clamp(1rem, 1.65vw, 1.17rem);
+      line-height:1.75;
+      max-width:700px;
+    }
 
-}
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-bottom:26px;
+    }
 
-h1{
+    .hero-notes{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
 
-font-size:56px;
-font-weight:600;
-letter-spacing:1px;
-margin-bottom:20px;
+    .note{
+      padding:18px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      box-shadow:var(--shadow);
+    }
 
-text-shadow:
-0 0 10px rgba(0,140,255,0.4),
-0 0 30px rgba(0,140,255,0.2);
+    .note strong{
+      display:block;
+      margin-bottom:7px;
+      font-size:1.05rem;
+    }
 
-}
+    .note span{
+      color:var(--muted);
+      font-size:0.92rem;
+      line-height:1.55;
+    }
 
-.subtitle{
+    .hero-visual{
+      position:relative;
+      min-height:560px;
+    }
 
-font-size:22px;
-opacity:0.85;
-margin-bottom:40px;
+    .visual-glow{
+      position:absolute;
+      inset:12% 8% auto;
+      width:84%;
+      aspect-ratio:1;
+      background:
+        radial-gradient(circle, rgba(75,155,255,0.16), transparent 58%);
+      filter:blur(12px);
+    }
 
-}
+    .hero-panel{
+      position:absolute;
+      inset:0;
+      border-radius:30px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(115,208,255,0.14), transparent 26%),
+        linear-gradient(180deg, rgba(10,24,45,0.9), rgba(5,14,27,0.95));
+      box-shadow:var(--shadow);
+      padding:22px;
+      overflow:hidden;
+    }
 
-.coming{
+    .panel-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
 
-font-size:18px;
-letter-spacing:4px;
-opacity:0.7;
+    .panel-top span{
+      color:var(--muted);
+      font-size:0.88rem;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+    }
 
-}
+    .lights{
+      display:flex;
+      gap:6px;
+    }
 
-</style>
+    .lights i{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:block;
+      background:rgba(255,255,255,0.18);
+    }
 
+    .lights i:nth-child(1){ background:var(--cyan); box-shadow:0 0 14px var(--cyan); }
+    .lights i:nth-child(2){ background:var(--blue); box-shadow:0 0 14px var(--blue); }
+    .lights i:nth-child(3){ background:var(--violet); box-shadow:0 0 14px var(--violet); }
+
+    .mission-title{
+      font-size:1.24rem;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .mission-copy{
+      color:var(--muted);
+      line-height:1.6;
+      font-size:0.96rem;
+      margin-bottom:18px;
+    }
+
+    .landing-stage{
+      position:relative;
+      min-height:315px;
+      border-radius:24px;
+      border:1px solid rgba(120,170,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(8,18,34,0.95), rgba(5,11,22,1));
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .grid-floor{
+      position:absolute;
+      inset:auto -12% -8% -12%;
+      height:54%;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(69,136,255,0.05) 100%),
+        repeating-linear-gradient(90deg, rgba(114,175,255,0.12) 0 1px, transparent 1px 72px),
+        repeating-linear-gradient(0deg, rgba(114,175,255,0.12) 0 1px, transparent 1px 72px);
+      transform:perspective(800px) rotateX(72deg);
+      transform-origin:top center;
+    }
+
+    .pad{
+      position:absolute;
+      bottom:68px;
+      width:190px;
+      height:190px;
+      border-radius:50%;
+      border:1px solid rgba(117,224,255,0.34);
+      background:
+        radial-gradient(circle, rgba(59,196,255,0.16), transparent 65%);
+      box-shadow:
+        0 0 34px rgba(80,190,255,0.12),
+        inset 0 0 28px rgba(80,190,255,0.06);
+      animation:pulse 3.3s ease-in-out infinite;
+    }
+
+    .pad::before,
+    .pad::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      border:1px solid rgba(117,224,255,0.26);
+      inset:18px;
+    }
+
+    .pad::after{
+      inset:42px;
+    }
+
+    .pad-core{
+      position:absolute;
+      inset:50%;
+      transform:translate(-50%,-50%);
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--cyan), var(--blue));
+      box-shadow:0 0 24px rgba(90,220,255,0.55);
+    }
+
+    @keyframes pulse{
+      0%,100%{ transform:scale(1); opacity:0.88; }
+      50%{ transform:scale(1.05); opacity:1; }
+    }
+
+    .drone{
+      position:absolute;
+      top:68px;
+      width:220px;
+      height:150px;
+      animation:hover 4s ease-in-out infinite;
+      filter:drop-shadow(0 16px 28px rgba(54,144,255,0.22));
+    }
+
+    @keyframes hover{
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-10px); }
+    }
+
+    .signal-beam{
+      position:absolute;
+      top:148px;
+      width:150px;
+      height:175px;
+      background:linear-gradient(180deg, rgba(104,183,255,0.22), transparent 86%);
+      clip-path:polygon(44% 0%, 56% 0%, 100% 100%, 0% 100%);
+      filter:blur(3px);
+      animation:beamPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes beamPulse{
+      0%,100%{ opacity:0.42; }
+      50%{ opacity:0.92; }
+    }
+
+    .hero-mini-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .hero-mini{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+    }
+
+    .hero-mini strong{
+      display:block;
+      margin-bottom:5px;
+      font-size:0.92rem;
+    }
+
+    .hero-mini span{
+      color:var(--muted);
+      font-size:0.82rem;
+      line-height:1.45;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:clamp(2rem,4vw,3.3rem);
+      letter-spacing:-0.04em;
+    }
+
+    .section-copy{
+      margin:0 0 34px;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:1.03rem;
+      max-width:820px;
+    }
+
+    .grid-3,
+    .grid-2{
+      display:grid;
+      gap:18px;
+    }
+
+    .grid-3{
+      grid-template-columns:repeat(3, minmax(0,1fr));
+    }
+
+    .grid-2{
+      grid-template-columns:repeat(2, minmax(0,1fr));
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:1.18rem;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:0.98rem;
+    }
+
+    .icon{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      margin-bottom:16px;
+      font-weight:800;
+      color:white;
+      background:
+        linear-gradient(135deg, rgba(56,128,255,0.92), rgba(110,242,255,0.72));
+      box-shadow:
+        0 0 20px rgba(86,175,255,0.16),
+        0 8px 18px rgba(34,89,177,0.22);
+    }
+
+    .diagram-card{
+      background:
+        linear-gradient(180deg, rgba(10,24,45,0.9), rgba(6,14,28,0.96));
+    }
+
+    .architecture{
+      display:grid;
+      gap:16px;
+    }
+
+    .flow{
+      display:grid;
+      grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;
+      gap:12px;
+      align-items:center;
+    }
+
+    .flow-box{
+      min-height:120px;
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      text-align:center;
+    }
+
+    .flow-box strong{
+      display:block;
+      margin-bottom:7px;
+      font-size:0.98rem;
+    }
+
+    .flow-box span{
+      color:var(--muted);
+      font-size:0.86rem;
+      line-height:1.5;
+    }
+
+    .flow-arrow{
+      height:2px;
+      background:linear-gradient(90deg, rgba(104,183,255,0.18), rgba(104,183,255,0.92));
+      position:relative;
+    }
+
+    .flow-arrow::after{
+      content:"";
+      position:absolute;
+      right:-1px;
+      top:50%;
+      width:10px;
+      height:10px;
+      transform:translateY(-50%) rotate(45deg);
+      border-top:2px solid #8edcff;
+      border-right:2px solid #8edcff;
+    }
+
+    .process-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .step{
+      position:relative;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+      border-radius:22px;
+      padding:22px 18px 22px 58px;
+      min-height:170px;
+    }
+
+    .step-num{
+      position:absolute;
+      left:16px;
+      top:18px;
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-weight:800;
+      color:#04111d;
+      background:linear-gradient(135deg, var(--cyan), var(--blue));
+      box-shadow:0 0 20px rgba(98,220,255,0.32);
+    }
+
+    .step h4{
+      margin:0 0 10px;
+      font-size:1rem;
+    }
+
+    .step p{
+      margin:0;
+      color:var(--muted);
+      font-size:0.94rem;
+      line-height:1.62;
+    }
+
+    .apps{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .app{
+      padding:22px;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.03);
+      min-height:190px;
+    }
+
+    .app h4{
+      margin:0 0 10px;
+      font-size:1.05rem;
+    }
+
+    .app p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.65;
+      font-size:0.95rem;
+    }
+
+    .roadmap{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+
+    .milestone{
+      position:relative;
+      padding:24px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .milestone::before{
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:4px;
+      background:linear-gradient(180deg, var(--cyan), var(--blue), var(--violet));
+    }
+
+    .milestone small{
+      display:block;
+      margin-bottom:10px;
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      font-size:0.78rem;
+    }
+
+    .milestone h4{
+      margin:0 0 10px;
+      font-size:1.08rem;
+    }
+
+    .milestone p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:0.95rem;
+    }
+
+    .cta{
+      padding-bottom:110px;
+    }
+
+    .cta-shell{
+      border:1px solid var(--line);
+      border-radius:30px;
+      padding:34px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(94,196,255,0.16), transparent 40%),
+        linear-gradient(180deg, rgba(11,29,52,0.94), rgba(6,14,28,0.96));
+      box-shadow:var(--shadow);
+    }
+
+    .cta-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+      flex-wrap:wrap;
+    }
+
+    .cta h2{
+      margin:0 0 10px;
+      font-size:clamp(1.9rem,4vw,3rem);
+      letter-spacing:-0.04em;
+    }
+
+    .cta p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.75;
+      max-width:720px;
+    }
+
+    footer{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      padding:0 0 34px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      color:rgba(181,199,225,0.74);
+      font-size:0.92rem;
+    }
+
+    .footer-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .footer-brand img{
+      height:22px;
+      width:auto;
+      opacity:0.94;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(22px);
+      transition:opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media (max-width: 1100px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+
+      .hero-visual{
+        min-height:520px;
+      }
+
+      .grid-3,
+      .grid-2,
+      .apps,
+      .roadmap,
+      .process-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+
+      .flow{
+        grid-template-columns:1fr;
+      }
+
+      .flow-arrow{
+        display:none;
+      }
+    }
+
+    @media (max-width: 760px){
+      .nav-links{
+        display:none;
+      }
+
+      .container,
+      .nav-inner,
+      footer{
+        width:min(var(--max), calc(100% - 20px));
+      }
+
+      section{
+        padding:74px 0;
+      }
+
+      .hero{
+        min-height:auto;
+        padding-top:10px;
+      }
+
+      .hero-visual{
+        min-height:440px;
+      }
+
+      .drone{
+        width:170px;
+        top:74px;
+      }
+
+      .signal-beam{
+        width:110px;
+        top:138px;
+      }
+
+      .pad{
+        width:145px;
+        height:145px;
+        bottom:58px;
+      }
+
+      .hero-notes,
+      .hero-mini-grid,
+      .grid-3,
+      .grid-2,
+      .apps,
+      .roadmap,
+      .process-grid{
+        grid-template-columns:1fr;
+      }
+
+      .cta-shell{
+        padding:24px;
+      }
+
+      h1{
+        font-size:clamp(2.3rem, 10vw, 4rem);
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <nav class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="#top">
+  <img src="./logo.png?v=6" alt="Airsent logo" class="brand-logo" />
+</a>
 
-<div class="container">
+        <div class="nav-links">
+          <a href="#usp">USP</a>
+          <a href="#system">System</a>
+          <a href="#process">How It Works</a>
+          <a href="#applications">Applications</a>
+          <a href="#roadmap">Roadmap</a>
+        </div>
 
-<img src="logo.png" class="logo">
+        <a class="btn secondary" href="#cta">Coming Soon</a>
+      </div>
+    </nav>
 
-<h1>Precision Autonomous Drone Landing</h1>
+    <section class="hero container" id="top">
+      <div class="reveal">
+        <div class="eyebrow">Camera-free precision landing</div>
+        <h1>Autonomous drone landing built around the pad.</h1>
+        <p>
+          Airsent is developing a precision autonomous drone landing platform centered on
+          a smart landing pad and non-camera sensing. Instead of relying on vision-based
+          targeting, the system is designed to guide the drone into a controlled, repeatable,
+          and reliable touchdown using a dedicated landing infrastructure layer.
+        </p>
 
-<p class="subtitle">
-Next-generation autonomous delivery technology
-</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#system">See the system</a>
+          <a class="btn secondary" href="#usp">Why camera-free matters</a>
+        </div>
 
-<p class="coming">
-COMING SOON
-</p>
+        <div class="hero-notes">
+          <div class="note">
+            <strong>No camera dependency</strong>
+            <span>Designed without visual targeting as the primary landing solution.</span>
+          </div>
+          <div class="note">
+            <strong>Landing pad first</strong>
+            <span>The pad becomes an active part of mission completion, not just a passive target.</span>
+          </div>
+          <div class="note">
+            <strong>Repeatable touchdown</strong>
+            <span>Built for consistency, reliability, and controlled final-meter landing.</span>
+          </div>
+        </div>
+      </div>
 
-</div>
+      <div class="hero-visual reveal">
+        <div class="visual-glow"></div>
 
+        <div class="hero-panel">
+          <div class="panel-top">
+            <span>Core Mission Logic</span>
+            <div class="lights"><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="mission-title">Pad-guided autonomous landing</div>
+          <div class="mission-copy">
+            A camera-free landing workflow where the drone and landing pad work together
+            to create a more deterministic final approach.
+          </div>
+
+          <div class="landing-stage">
+            <div class="grid-floor"></div>
+            <div class="pad">
+              <div class="pad-core"></div>
+            </div>
+            <div class="signal-beam"></div>
+
+            <svg class="drone" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Drone illustration">
+              <rect x="110" y="70" width="80" height="34" rx="12" fill="#e4f1ff" opacity="0.97"/>
+              <rect x="132" y="48" width="36" height="18" rx="8" fill="#7dd8ff"/>
+              <line x1="72" y1="80" x2="110" y2="84" stroke="#d5ebff" stroke-width="8" stroke-linecap="round"/>
+              <line x1="190" y1="84" x2="228" y2="80" stroke="#d5ebff" stroke-width="8" stroke-linecap="round"/>
+              <line x1="114" y1="104" x2="90" y2="132" stroke="#d5ebff" stroke-width="7" stroke-linecap="round"/>
+              <line x1="186" y1="104" x2="210" y2="132" stroke="#d5ebff" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="64" cy="78" r="22" stroke="#72dfff" stroke-width="7"/>
+              <circle cx="236" cy="78" r="22" stroke="#72dfff" stroke-width="7"/>
+              <circle cx="84" cy="140" r="22" stroke="#72dfff" stroke-width="7"/>
+              <circle cx="216" cy="140" r="22" stroke="#72dfff" stroke-width="7"/>
+              <circle cx="64" cy="78" r="8" fill="#e8f7ff"/>
+              <circle cx="236" cy="78" r="8" fill="#e8f7ff"/>
+              <circle cx="84" cy="140" r="8" fill="#e8f7ff"/>
+              <circle cx="216" cy="140" r="8" fill="#e8f7ff"/>
+            </svg>
+          </div>
+
+          <div class="hero-mini-grid">
+            <div class="hero-mini">
+              <strong>Smart Pad</strong>
+              <span>Landing infrastructure designed to assist final alignment and touchdown.</span>
+            </div>
+            <div class="hero-mini">
+              <strong>Guidance Stack</strong>
+              <span>Non-visual sensing and control logic refine the final descent.</span>
+            </div>
+            <div class="hero-mini">
+              <strong>Reliable Endgame</strong>
+              <span>The hardest part of the mission becomes the main product.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="usp">
+      <div class="reveal">
+        <h2 class="section-title">Why the camera-free approach matters</h2>
+        <p class="section-copy">
+          Airsent is not trying to be another vision-based drone landing system. The core
+          product is a camera-free precision landing architecture built around a dedicated
+          landing pad. That matters because final approach reliability should not depend on
+          lighting conditions, visual ambiguity, or complex image processing as the main
+          determinant of touchdown.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card reveal">
+          <div class="icon">01</div>
+          <h3>More deterministic</h3>
+          <p>
+            A pad-centered system makes the landing environment more controlled and more
+            repeatable than a fully open-ended visual search problem.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <div class="icon">02</div>
+          <h3>Clearer product boundary</h3>
+          <p>
+            The landing pad is not an accessory. It is a core part of the product and
+            creates a defensible operating model for precision drone delivery.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <div class="icon">03</div>
+          <h3>Mission-focused design</h3>
+          <p>
+            Instead of solving every landing environment at once, Airsent focuses on
+            reliable landing where the system can define the final interaction.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="system">
+      <div class="reveal">
+        <h2 class="section-title">System architecture</h2>
+        <p class="section-copy">
+          Airsent combines autonomous flight, non-camera sensing, and a smart landing pad
+          into one integrated platform. The drone does not simply fly to a location — it
+          completes the mission through coordinated interaction with landing infrastructure.
+        </p>
+      </div>
+
+      <div class="card diagram-card reveal architecture">
+        <div class="flow">
+          <div class="flow-box">
+            <strong>Mission Input</strong>
+            <span>Destination, delivery task, and landing objective</span>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-box">
+            <strong>Navigation Layer</strong>
+            <span>Autonomous flight path and transition into final landing mode</span>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-box">
+            <strong>Non-Camera Sensing</strong>
+            <span>Camera-free state awareness for final approach refinement</span>
+          </div>
+          <div class="flow-arrow"></div>
+          <div class="flow-box">
+            <strong>Smart Landing Pad</strong>
+            <span>Dedicated landing interface for controlled precision touchdown</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="process">
+      <div class="reveal">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-copy">
+          The product is built around one question: how does a drone complete the last and
+          most critical phase of the mission with higher confidence? Airsent answers that
+          by turning the landing pad into an active part of the system.
+        </p>
+      </div>
+
+      <div class="process-grid">
+        <div class="step reveal">
+          <div class="step-num">1</div>
+          <h4>Navigate to target zone</h4>
+          <p>
+            The drone performs autonomous flight to the destination area and prepares for
+            final landing mode.
+          </p>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-num">2</div>
+          <h4>Transition to landing sequence</h4>
+          <p>
+            The vehicle moves from general navigation into a dedicated final-approach logic
+            tied to the landing system.
+          </p>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-num">3</div>
+          <h4>Interface with the pad system</h4>
+          <p>
+            The landing pad becomes the reference environment for controlled touchdown,
+            rather than relying on open-ended vision-based interpretation.
+          </p>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-num">4</div>
+          <h4>Refine final approach</h4>
+          <p>
+            Non-camera sensing and control logic tighten the descent and correct the landing
+            path in real time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="reveal">
+        <h2 class="section-title">What this unlocks</h2>
+        <p class="section-copy">
+          A controlled, pad-centered landing model can make drone delivery more practical,
+          safer, and easier to standardize for real deployments.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card reveal">
+          <h3>Precision delivery infrastructure</h3>
+          <p>
+            The product can evolve into a delivery ecosystem where portable or fixed landing
+            pads define where drones can complete missions cleanly and reliably.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <h3>Better final-meter reliability</h3>
+          <p>
+            The real bottleneck in autonomous delivery is often the last phase of touchdown.
+            Airsent is designed specifically around solving that endgame.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="applications">
+      <div class="reveal">
+        <h2 class="section-title">Potential applications</h2>
+        <p class="section-copy">
+          A camera-free precision landing platform can support delivery environments where
+          consistency, repeatability, and controlled touchdown matter most.
+        </p>
+      </div>
+
+      <div class="apps">
+        <div class="app reveal">
+          <h4>Last-mile logistics</h4>
+          <p>
+            A dedicated landing system can make recurring drone deliveries more operationally
+            predictable.
+          </p>
+        </div>
+
+        <div class="app reveal">
+          <h4>Residential landing pads</h4>
+          <p>
+            Portable or designated home landing surfaces could become the endpoint for
+            future autonomous deliveries.
+          </p>
+        </div>
+
+        <div class="app reveal">
+          <h4>Campus and enterprise</h4>
+          <p>
+            Controlled landing points are easier to standardize across repeat-use
+            environments like campuses and facilities.
+          </p>
+        </div>
+
+        <div class="app reveal">
+          <h4>Emergency operations</h4>
+          <p>
+            Reliable touchdown on prepared landing infrastructure can support rapid-response
+            supply delivery scenarios.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="roadmap">
+      <div class="reveal">
+        <h2 class="section-title">Roadmap</h2>
+        <p class="section-copy">
+          The focus is to move from prototype-level autonomy toward a validated camera-free
+          precision landing system centered around a deployable pad solution.
+        </p>
+      </div>
+
+      <div class="roadmap">
+        <div class="milestone reveal">
+          <small>Phase 01</small>
+          <h4>Prototype platform</h4>
+          <p>
+            Build the initial autonomous drone platform and integrate the core landing pad
+            concept into the mission architecture.
+          </p>
+        </div>
+
+        <div class="milestone reveal">
+          <small>Phase 02</small>
+          <h4>Pad-guided landing validation</h4>
+          <p>
+            Demonstrate repeatable touchdown using the landing pad and non-camera sensing
+            as the core final-approach workflow.
+          </p>
+        </div>
+
+        <div class="milestone reveal">
+          <small>Phase 03</small>
+          <h4>Scalable delivery system</h4>
+          <p>
+            Expand from prototype landing success into a broader precision delivery platform
+            built around landing infrastructure.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container cta" id="cta">
+      <div class="cta-shell reveal">
+        <div class="cta-row">
+          <div>
+            <h2>Camera-free precision landing, coming soon.</h2>
+            <p>
+              Airsent is building a smarter way for drones to complete the mission —
+              by landing on purpose, not just arriving nearby.
+            </p>
+          </div>
+
+          <a class="btn primary" href="#top">Back to top</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-brand">
+        <img src="./logo.png?v=5" alt="Airsent logo" />
+        <span>AIRSENT</span>
+      </div>
+      <div>Camera-Free Precision Autonomous Drone Landing • airsent.tech</div>
+    </footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  </script>
 </body>
-
 </html>
