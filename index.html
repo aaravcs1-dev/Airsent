@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Airsent</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-family:'Inter', sans-serif;
+color:white;
+text-align:center;
+
+/* DARK AEROSPACE BACKGROUND */
+
+background:
+radial-gradient(circle at center,
+#0a2742 0%,
+#061a2d 40%,
+#04111f 100%);
+
+overflow:hidden;
+
+}
+
+/* PARTICLES */
+
+body::before{
+content:"";
+position:absolute;
+width:200%;
+height:200%;
+
+background-image:
+radial-gradient(white 1px, transparent 1px);
+
+background-size:60px 60px;
+
+opacity:0.05;
+
+animation:moveStars 60s linear infinite;
+
+}
+
+@keyframes moveStars{
+
+from{transform:translateY(0);}
+to{transform:translateY(-500px);}
+
+}
+
+.container{
+
+max-width:900px;
+padding:40px;
+position:relative;
+z-index:2;
+
+}
+
+/* BIGGER LOGO */
+
+.logo{
+
+width:420px;
+margin-bottom:60px;
+
+filter:drop-shadow(0 0 20px rgba(0,140,255,0.4));
+
+animation:logoGlow 4s ease-in-out infinite;
+
+}
+
+@keyframes logoGlow{
+
+0%{filter:drop-shadow(0 0 15px rgba(0,140,255,0.3));}
+50%{filter:drop-shadow(0 0 35px rgba(0,140,255,0.6));}
+100%{filter:drop-shadow(0 0 15px rgba(0,140,255,0.3));}
+
+}
+
+h1{
+
+font-size:56px;
+font-weight:600;
+letter-spacing:1px;
+margin-bottom:20px;
+
+text-shadow:
+0 0 10px rgba(0,140,255,0.4),
+0 0 30px rgba(0,140,255,0.2);
+
+}
+
+.subtitle{
+
+font-size:22px;
+opacity:0.85;
+margin-bottom:40px;
+
+}
+
+.coming{
+
+font-size:18px;
+letter-spacing:4px;
+opacity:0.7;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<img src="logo.png" class="logo">
+
+<h1>Precision Autonomous Drone Landing</h1>
+
+<p class="subtitle">
+Next-generation autonomous delivery technology
+</p>
+
+<p class="coming">
+COMING SOON
+</p>
+
+</div>
+
+</body>
+
+</html>
